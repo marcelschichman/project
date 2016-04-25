@@ -1,0 +1,15 @@
+﻿{% extends "tests/base.html" %}
+{% block scripts %}
+    {% load staticfiles %}
+    <script>
+        var updateUrl = '{% url 'update_student' %}';
+    </script>
+    <script src="{% static "tests/scripts/studentslobby.js" %}"></script>
+{% endblock %}
+
+{% block content %}
+<h1>Súčasné testy</h1>
+<div id="current_tests">
+</div>
+    
+{% endblock %}

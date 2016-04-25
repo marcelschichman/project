@@ -1,0 +1,16 @@
+﻿{% extends "tests/base.html" %}
+{% block scripts %}
+    {% load staticfiles %}
+    <script>
+        var updateUrl = '{% url 'update_teacher' %}';
+    </script>
+    <script src="{% static "tests/scripts/teacherslobby.js" %}"></script>
+{% endblock %}
+
+{% block content %}
+<h1>My tests</h1>
+<div id="my_tests">
+</div>
+
+<a href="{% url 'create_test' %}">Vytvoriť test</a>
+{% endblock %}

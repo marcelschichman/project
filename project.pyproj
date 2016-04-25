@@ -40,6 +40,13 @@
     <Compile Include="project\settings.py" />
     <Compile Include="project\urls.py" />
     <Compile Include="project\wsgi.py" />
+    <Compile Include="tests\admin.py" />
+    <Compile Include="tests\apps.py" />
+    <Compile Include="tests\migrations\__init__.py" />
+    <Compile Include="tests\models.py" />
+    <Compile Include="tests\tests.py" />
+    <Compile Include="tests\views.py" />
+    <Compile Include="tests\__init__.py" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="app\" />
@@ -52,6 +59,13 @@
     <Folder Include="app\templates\" />
     <Folder Include="app\templates\app\" />
     <Folder Include="project\" />
+    <Folder Include="tests\" />
+    <Folder Include="tests\migrations\" />
+    <Folder Include="tests\static\" />
+    <Folder Include="tests\static\tests\" />
+    <Folder Include="tests\static\tests\scripts\" />
+    <Folder Include="tests\templates\" />
+    <Folder Include="tests\templates\tests\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="requirements.txt" />
@@ -84,6 +98,19 @@
     <Content Include="app\templates\app\layout.html" />
     <Content Include="app\templates\app\login.html" />
     <Content Include="app\templates\app\loginpartial.html" />
+    <Content Include="tests\static\tests\scripts\ajaxCSRF.js" />
+    <Content Include="tests\static\tests\scripts\createtest.js" />
+    <Content Include="tests\static\tests\scripts\jquery-1.12.3.js" />
+    <Content Include="tests\static\tests\scripts\studentslobby.js" />
+    <Content Include="tests\static\tests\scripts\taketest.js" />
+    <Content Include="tests\static\tests\scripts\teacherslobby.js" />
+    <Content Include="tests\templates\tests\base.html" />
+    <Content Include="tests\templates\tests\createtest.html" />
+    <Content Include="tests\templates\tests\current_tests.html" />
+    <Content Include="tests\templates\tests\my_tests.html" />
+    <Content Include="tests\templates\tests\studentslobby.html" />
+    <Content Include="tests\templates\tests\take_test.html" />
+    <Content Include="tests\templates\tests\teacherslobby.html" />
   </ItemGroup>
   <ItemGroup>
     <None Include="readme.mht">

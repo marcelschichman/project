@@ -1,0 +1,24 @@
+﻿{% extends "tests/base.html" %}
+{% block scripts %}
+    {% load staticfiles %}
+    {% if test_data %}
+    <script>
+        var test_data = {{ test_data|safe }};
+    </script>
+    {% else %}
+    <script>
+        var test_data = '';
+    </script>
+    {% endif %}
+    <script src="{% static "tests/scripts/taketest.js" %}"></script>
+{% endblock %}
+
+{% block content %}
+    <div id="test_name">{{ test_name }}</div>
+    <div id="tasks"></div>
+    <form method="post">
+        {% csrf_token %}
+        <button id="submit_test" type="submit">Odovzdať</button>
+        <input type="hidden" name="test_data" id="test_data_hidden" />
+    </form>
+{% endblock %}

@@ -1,0 +1,8 @@
+﻿<table id="current_tests_table">
+    {% for test in tests %}
+        <tr>
+            <td><a href="{% url 'take_test' test.id %}">{{ test.name }}</a></td>
+            <td>{{ test.teacher.username }}</td>
+        </tr>
+    {% endfor %}
+</table>

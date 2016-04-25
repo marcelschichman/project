@@ -1,0 +1,15 @@
+﻿<table id="my_tests_table">
+    {% for test in tests %}
+        <tr>
+            <td><a href="{% url 'edit_test' test.id %}">{{ test.name }}</a></td>
+            <td>{{ test.testprogress_set.count }}</td>
+            <td>
+                {% if test.is_active %}
+                    <button onclick="deactivateTest({{ test.id }})">Deactivate</button>
+                {% else %}
+                    <button onclick="activateTest({{ test.id }})">Activate</button>
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+</table>

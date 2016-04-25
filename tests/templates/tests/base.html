@@ -1,0 +1,15 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    {% load staticfiles %}
+    <title></title>
+    <meta charset="utf-8" />
+    <script src="{% static "tests/scripts/jquery-1.12.3.js" %}"></script>
+    <script src="{% static "tests/scripts/ajaxCSRF.js" %}"></script>
+    {% block scripts %}{% endblock %}
+</head>
+
+<body>
+    {% block content %}{% endblock %}
+</body>
+</html>

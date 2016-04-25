@@ -1,0 +1,27 @@
+﻿{% extends "tests/base.html" %}
+{% block scripts %}
+    {% load staticfiles %}
+    {% if test_data %}
+    <script>
+        var test_data = {{ test_data|safe }};
+    </script>
+    {% else %}
+    <script>
+        var test_data = '';
+    </script>
+    {% endif %}
+    <script src="{% static "tests/scripts/createtest.js" %}"></script>
+{% endblock %}
+
+{% block content %}
+    <input type="text" id="test_name" value="{{ test_name }}" />
+    <div id="tasks"></div>
+    <button id="add_task_text">Pridať textovú úlohu</button>
+    <button id="add_task_choice">Pridať úlohu s výberom možností</button>
+    <form method="post">
+        {% csrf_token %}
+        <button id="submit_test" type="submit">Uložiť</button>
+        <input type="hidden" name="test_data" id="test_data_hidden" />
+        <input type="hidden" name="test_name" id="test_name_hidden" />
+    </form>
+{% endblock %}
