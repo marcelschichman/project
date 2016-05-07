@@ -17,6 +17,7 @@ class TestProgress(models.Model):
     test = models.ForeignKey(Test)
     time_start = models.DateTimeField(auto_now=True)
     time_end = models.DateTimeField(null=True)
+    evaluated = models.BooleanField(default=False)
 
 class Answer(models.Model):
     question = models.ForeignKey(Question)

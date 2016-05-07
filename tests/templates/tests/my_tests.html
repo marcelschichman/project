@@ -5,11 +5,12 @@
             <td>{{ test.testprogress_set.count }}</td>
             <td>
                 {% if test.is_active %}
-                    <button onclick="deactivateTest({{ test.id }})">Deactivate</button>
+                    <button onclick="deactivateTest({{ test.id }})">Deaktivovať</button>
                 {% else %}
-                    <button onclick="activateTest({{ test.id }})">Activate</button>
+                    <button onclick="activateTest({{ test.id }})">Aktivovať</button>
                 {% endif %}
             </td>
+            <td><button onclick="showResults({{ test.id }})">Výsledky</button></td>
         </tr>
     {% endfor %}
 </table>

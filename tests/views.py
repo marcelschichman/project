@@ -7,6 +7,7 @@ from django.utils.html import escape
 from django.shortcuts import get_object_or_404
 from .models import *
 import json
+import datetime
 
 
 def login(request):
@@ -89,7 +90,8 @@ def take_test(request, test_id):
                     continue
                 answer = Answer(question=question, student=request.user, value=task_data['answer'])
                 answer.save()
-
+            test_progress.time_end = datetime.datetime.now()
+            test_progress.save()
             return redirect('lobby')
     
     tasks = []
@@ -103,7 +105,6 @@ def take_test(request, test_id):
 
     
 def test_results(request, test_progress_id):
-
     pass
 
 def update_teacher(request):
@@ -124,9 +125,26 @@ def update_teacher(request):
             test.save()
 
     my_tests = Test.objects.filter(teacher=request.user)
+    response_data = {}
+    if 'results' in request.POST:
+        test = Test.objects.get(pk=request.POST.get('results', 0))
+        test_progresses = TestProgress.objects.filter(test=request.POST.get('results', 0))
+        result_list = []
+        for test_progress in test_progresses:
+            row = {
+                "pk": test_progress.pk,
+                "name": "%s %s" % (test_progress.student.first_name, test_progress.student.last_name),
+                "evaluated": test_progress.evaluated,
+            }
+            if test_progress.evaluated:
+                row["total"] = Question.objects.filter(test=test_progress.test).count()
+                row["correct"] = Answer.objects.filter(question__test=test_progress.test, student=test_progress.student, correct=True).count()
+            result_list.append(row)
+        response_data["results"] = render_to_string('tests/results_list.html', {"test_results": result_list, "test_name": test.name})
     
     my_tests_render = render_to_string('tests/my_tests.html', {"tests": my_tests})
-    return HttpResponse(json.dumps({"my_tests": my_tests_render}))
+    response_data["my_tests"] = my_tests_render
+    return HttpResponse(json.dumps(response_data))
 
 
 def update_student(request):
@@ -137,8 +155,39 @@ def update_student(request):
     current_tests_render = render_to_string('tests/current_tests.html', {"tests": current_tests})
     return HttpResponse(json.dumps({"current_tests": current_tests_render}))
 
+
+@login_required(login_url='/login/')
+def evaluate_test(request, test_progress_id):
+    if not is_teacher(request):
+        return HttpResponseForbidden()
+    test_progress = get_object_or_404(TestProgress, pk=test_progress_id)
+    if test_progress.test.teacher != request.user:
+        return HttpResponseForbidden()
+    if request.method == 'POST':
+        test_data = json.loads(request.POST.get('test_data', '[]'))
+        for task_data in test_data:
+            answer = Answer.objects.get(pk=task_data['pk'])
+            if answer is None or answer.question.test.teacher != request.user:
+                continue
+            answer.correct = task_data["answer_correct"]
+            answer.save()
+        test_progress.evaluated = True
+        test_progress.save()
+        return redirect('lobby')
+
+    answers = Answer.objects.filter(student=test_progress.student, question__test=test_progress.test)
+    
+    tasks = []
+    for answer in answers:
+        task = json.loads(answer.question.assignment)
+        task["pk"] = answer.pk
+        task["answer"] = answer.value
+        tasks.append(task)
+    return render(request, 'tests/evaluatetest.html', {"test_data": json.dumps(tasks)})
+
 def is_teacher(request):
     return request.user.groups.filter(name='teacher').exists()
 
 def is_student(request):
     return request.user.groups.filter(name='student').exists()
+

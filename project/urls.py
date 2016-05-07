@@ -20,6 +20,7 @@ urlpatterns = [
     url(r'^createtest/$', tests.views.create_test, name='create_test'),
     url(r'^edittest/(?P<test_id>[0-9]+)/$', tests.views.create_test, name='edit_test'),
     url(r'^taketest/(?P<test_id>[0-9]+)/$', tests.views.take_test, name='take_test'),
+    url(r'^evaluatetest/(?P<test_progress_id>[0-9]+)/$', tests.views.evaluate_test, name='evaluate_test'),
     
     url(r'^updateteacher$', tests.views.update_teacher, name='update_teacher'),
     url(r'^updatestudent$', tests.views.update_student, name='update_student'),

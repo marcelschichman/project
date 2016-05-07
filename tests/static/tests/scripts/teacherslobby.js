@@ -11,6 +11,9 @@
 
 function updateData(data) {
     $("#my_tests").html(data["my_tests"]);
+    if ("results" in data) {
+        $("#test_results").html(data["results"]);
+    }
 }
 
 function activateTest(testId) {
@@ -35,3 +38,13 @@ function deactivateTest(testId) {
     });
 }
 
+function showResults(testId) {
+    $.ajax({
+        url: updateUrl,
+        method: "POST",
+        data: { "results": testId },
+        dataType: 'json',
+    }).done(function (data) {
+        updateData(data);
+    });
+}
