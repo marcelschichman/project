@@ -14,14 +14,28 @@
 {% endblock %}
 
 {% block content %}
-    <input type="text" id="test_name" value="{{ test_name }}" />
+    <div class="row">
+        <div class="col-sm-6">
+            <input type="text" class="form-control" placeholder="Názov testu" id="test_name" value="{{ test_name }}" />
+            <div class="bg-danger" id="test_name_error"></div>
+        </div>
+    </div>
     <div id="tasks"></div>
-    <button id="add_task_text">Pridať textovú úlohu</button>
-    <button id="add_task_choice">Pridať úlohu s výberom možností</button>
-    <form method="post">
-        {% csrf_token %}
-        <button id="submit_test" type="submit">Uložiť</button>
-        <input type="hidden" name="test_data" id="test_data_hidden" />
-        <input type="hidden" name="test_name" id="test_name_hidden" />
-    </form>
+    <br />
+    <div class="row">
+        <div class="text-center" style="float: none;">
+            <button class="btn btn-default" id="add_task_text">Pridať textovú úlohu</button>
+            <button class="btn btn-default" id="add_task_choice">Pridať úlohu s výberom možností</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="text-center" style="float: none;">
+            <form method="post">
+                {% csrf_token %}
+                <button class="btn btn-default" id="submit_test" type="submit">Uložiť</button>
+                <input type="hidden" name="test_data" id="test_data_hidden" />
+                <input type="hidden" name="test_name" id="test_name_hidden" />
+            </form>
+        </div>
+    </div>
 {% endblock %}

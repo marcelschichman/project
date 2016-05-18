@@ -14,11 +14,11 @@
 {% endblock %}
 
 {% block content %}
-    <div id="test_name">{{ test_name }}</div>
+    <h1 id="test_name">{{ test_name }}</h1>
     <div id="tasks"></div>
     <form method="post">
         {% csrf_token %}
-        <button id="submit_test" type="submit">Odovzdať</button>
+        <button id="submit_test" class="btn btn-default" type="submit">Odovzdať</button>
         <input type="hidden" name="test_data" id="test_data_hidden" />
     </form>
 {% endblock %}

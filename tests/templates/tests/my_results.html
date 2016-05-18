@@ -1,20 +1,16 @@
-﻿<h1>Výsledky testu {{ test_name }}</h1>
+﻿<h1>Moje výsledky {{ test_name }}</h1>
 <table id="test_results_table" class="table table-hover table-condensed">
     <thead>
         <tr>
-            <th class="col-md-10">Meno riešiteľa</th>
-            <th class="col-md-2">Výsledok</th>
+            <th class="col-md-10">Názov testu</th>
+            <th class="col-md-2">Môj výsledok</th>
         </tr>
     </thead>
     <tbody>
         {% for result in test_results %}
             <tr>
                 <td>{{ result.name }}</td>
-                {% if result.evaluated %}
                 <td>{{ result.correct }}/{{ result.total }}</td>
-                {% else %}
-                <td><a href="{% url 'evaluate_test' result.pk %}">Vyhodnotiť</a></td>
-                {% endif %}
             </tr>
         {% endfor %}
     </tbody>

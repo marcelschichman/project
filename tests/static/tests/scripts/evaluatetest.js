@@ -40,24 +40,24 @@ function addTask(task) {
 
 function renderTextTask(task) {
     var taskDiv = $("<div>", {
-        "class": "task",
+        "class": "task panel panel-default",
         "id": generateDomID()
     });
     $("<div>", {
-        "class": "assignment",
+        "class": "assignment panel-heading",
     }).html(task.assignment).appendTo(taskDiv);
-    $("<div>", {
+    $("<blockquote>", {
         "class": "answer"
     }).html(task["answer"]).appendTo(taskDiv);
-
-    var yesLabel = $("<label>").appendTo(taskDiv);
+    var btnGroup = $("<div>", {"class": "btn-group", "data-toggle": "buttons"}).appendTo(taskDiv);
+    var yesLabel = $("<label>", {"class": "btn btn-default"}).appendTo(btnGroup);
     $("<input>", {
         "type": "radio",
         "name": "correct_" + taskDiv.attr('id'),
         "value": 1
     }).appendTo(yesLabel);
     yesLabel.append("Správne");
-    var noLabel = $("<label>").appendTo(taskDiv);
+    var noLabel = $("<label>", {"class": "btn btn-default"}).appendTo(btnGroup);
     $("<input>", {
         "type": "radio",
         "name": "correct_" + taskDiv.attr('id'),
@@ -69,13 +69,13 @@ function renderTextTask(task) {
 
 function renderChoiceTask(task) {
     var taskDiv = $("<div>", {
-        "class": "task",
+        "class": "task panel panel-default",
         "id": generateDomID()
     });
     $("<div>", {
-        "class": "assignment",
+        "class": "assignment panel-heading",
     }).html(task.assignment).appendTo(taskDiv);
-    var choicesDiv = $("<div>", {"class": "choices"}).appendTo(taskDiv);
+    var choicesDiv = $("<div>", {"class": "choices panel-body"}).appendTo(taskDiv);
     for (var choice in task["choices"]) {
         renderChoice("choice_" + taskDiv.attr("id"), task["choices"][choice], task["choices"][choice]==task["answer"], task["choices"][choice]==task["correct"]).appendTo(choicesDiv);
     }
@@ -85,7 +85,7 @@ function renderChoiceTask(task) {
 function renderChoice(name, content = "", checked = false, correct = false) {
     var choiceDiv = $("<div>", {"class" : "choice"});
     if (checked) {
-        choiceDiv.css({"background-color": (correct ? "rgb(0, 255, 0)" : "rgb(255, 0, 0)")});
+        choiceDiv.addClass(correct ? "bg-success" : "bg-danger");
     }
     $("<span>", {"class": "choice_text"}).html(content).appendTo(choiceDiv);
     return choiceDiv;
@@ -120,7 +120,7 @@ function AddError(task, error) {
     if (errorDiv.html() != "") {
         errorDiv.append("<br />");
     }
-    errorDiv.append(error);
+    $("<div>", {"class": "bg-danger"}).html(error).appendTo(errorDiv);
 }
 
 function ResetErrors() {

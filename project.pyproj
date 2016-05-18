@@ -48,6 +48,7 @@
     <Folder Include="tests\migrations\" />
     <Folder Include="tests\static\" />
     <Folder Include="tests\static\tests\" />
+    <Folder Include="tests\static\tests\css\" />
     <Folder Include="tests\static\tests\scripts\" />
     <Folder Include="tests\templates\" />
     <Folder Include="tests\templates\tests\" />
@@ -55,10 +56,13 @@
   <ItemGroup>
     <Content Include="requirements.txt" />
     <Content Include="db.sqlite3" />
+    <Content Include="tests\static\tests\css\common.css" />
+    <Content Include="tests\static\tests\css\login.css" />
     <Content Include="tests\static\tests\scripts\ajaxCSRF.js" />
     <Content Include="tests\static\tests\scripts\createtest.js" />
     <Content Include="tests\static\tests\scripts\evaluatetest.js" />
     <Content Include="tests\static\tests\scripts\jquery-1.12.3.js" />
+    <Content Include="tests\static\tests\scripts\login.js" />
     <Content Include="tests\static\tests\scripts\studentslobby.js" />
     <Content Include="tests\static\tests\scripts\taketest.js" />
     <Content Include="tests\static\tests\scripts\teacherslobby.js" />
@@ -66,6 +70,8 @@
     <Content Include="tests\templates\tests\createtest.html" />
     <Content Include="tests\templates\tests\current_tests.html" />
     <Content Include="tests\templates\tests\evaluatetest.html" />
+    <Content Include="tests\templates\tests\login.html" />
+    <Content Include="tests\templates\tests\my_results.html" />
     <Content Include="tests\templates\tests\my_tests.html" />
     <Content Include="tests\templates\tests\results_list.html" />
     <Content Include="tests\templates\tests\studentslobby.html" />

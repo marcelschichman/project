@@ -1,8 +1,16 @@
-﻿<table id="current_tests_table">
-    {% for test in tests %}
+﻿<table id="current_tests_table" class="table table-hover table-condensed">
+    <thead>
         <tr>
-            <td><a href="{% url 'take_test' test.id %}">{{ test.name }}</a></td>
-            <td>{{ test.teacher.username }}</td>
+            <th class="col-md-8">Názov testu</th>
+            <th class="col-md-4">Učiteľ</th>
         </tr>
-    {% endfor %}
+    </thead>
+    <tbody>
+        {% for test in tests %}
+            <tr>
+                <td><a href="{% url 'take_test' test.id %}">{{ test.name }}</a></td>
+                <td>{{ test.teacher.first_name }} {{ test.teacher.last_name }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
 </table>

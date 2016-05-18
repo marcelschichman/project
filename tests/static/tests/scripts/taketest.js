@@ -42,27 +42,28 @@ function addTask(task) {
 
 function renderTextTask(task) {
     var taskDiv = $("<div>", {
-        "class": "task",
+        "class": "task panel panel-default",
         "id": generateDomID()
     });
     $("<div>", {
-        "class": "assignment",
+        "class": "assignment panel-heading",
     }).html(task.assignment).appendTo(taskDiv);
+    var panelBody = $("<div>", {"class": "panel-body"}).appendTo(taskDiv);
     $("<textarea>", {
-        "class": "answer"
-    }).appendTo(taskDiv);
+        "class": "answer form-control"
+    }).appendTo(panelBody);
     return taskDiv;
 }
 
 function renderChoiceTask(task) {
     var taskDiv = $("<div>", {
-        "class": "task",
+        "class": "task panel panel-default",
         "id": generateDomID()
     });
     $("<div>", {
-        "class": "assignment",
+        "class": "assignment panel-heading",
     }).html(task.assignment).appendTo(taskDiv);
-    var choicesDiv = $("<div>", {"class": "choices"}).appendTo(taskDiv);
+    var choicesDiv = $("<div>", {"class": "choices panel-body"}).appendTo(taskDiv);
     for (var choice in task["choices"]) {
         renderChoice("choice_" + taskDiv.attr("id"), task["choices"][choice], false).appendTo(choicesDiv);
     }
@@ -82,7 +83,7 @@ function generateDomID() {
 }
 
 function UpdateAndValidate() {
-    //ResetErrors();
+    ResetErrors();
     var success = true;
     for (var taskId in tasks) {
         task = tasks[taskId];
@@ -90,22 +91,26 @@ function UpdateAndValidate() {
         if (task["type"] == "text") {
             task["answer"] = $("textarea", taskDiv).val();
         } else if (task["type"] == "choice") {
+            if ($("input[type=radio]:checked", taskDiv).size() == 0) {
+                AddError(task, "Nevybrali ste ani jednu odpoveď.");
+                success = false;
+            }
             task["answer"] = $("input[type=radio]:checked", taskDiv).val();
         }
     }
     return success;
 }
 
-//function AddError(task, error) {
-//    var errorDiv = $("#" + task["dom_id"] + " .errors");
-//    if (errorDiv.html() != "") {
-//        errorDiv.append("<br />");
-//    }
-//    errorDiv.append(error);
-//}
+function AddError(task, error) {
+    var errorDiv = $("#" + task["dom_id"] + " .errors");
+    if (errorDiv.html() != "") {
+        errorDiv.append("<br />");
+    }
+    $("<div>", {"class": "bg-danger"}).html(error).appendTo(errorDiv);
+}
 
-//function ResetErrors() {
-//    for (var task in tasks) {
-//        $("#" + task + " .errors").empty();
-//    }
-//}
+function ResetErrors() {
+    for (var task in tasks) {
+        $("#" + task + " .errors").empty();
+    }
+}

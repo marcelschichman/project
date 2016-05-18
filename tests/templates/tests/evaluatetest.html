@@ -18,7 +18,7 @@
     <div id="tasks"></div>
     <form method="post">
         {% csrf_token %}
-        <button id="submit_test" type="submit">Uložiť</button>
+        <button id="submit_test" type="submit" class="btn btn-default">Uložiť</button>
         <input type="hidden" name="test_data" id="test_data_hidden" />
     </form>
 {% endblock %}

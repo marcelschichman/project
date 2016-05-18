@@ -6,10 +6,31 @@
     <meta charset="utf-8" />
     <script src="{% static "tests/scripts/jquery-1.12.3.js" %}"></script>
     <script src="{% static "tests/scripts/ajaxCSRF.js" %}"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <link href="{% static "tests/css/common.css" %}" type="text/css" rel="stylesheet" />
     {% block scripts %}{% endblock %}
 </head>
 
 <body>
+        <!-- Fixed navbar -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a href="{% url 'lobby' %}" class="navbar-brand">Aplikácia na testovanie študentov</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          {% if request.user.is_authenticated %}
+          <ul class="nav navbar-nav navbar-right">
+            <li><a>Prihlásený: {{ request.user.username }}</a></li>
+            <li class="active"><a href="{% url 'logout' %}">Odhlásiť</a></li>
+          </ul>
+          {% endif %}
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+    <div class="container">
     {% block content %}{% endblock %}
+    </div>
 </body>
 </html>

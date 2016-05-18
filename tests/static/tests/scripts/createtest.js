@@ -66,25 +66,22 @@ function addTask(task) {
 
 function renderTextTask(task) {
     var taskDiv = $("<div>", {
-        "class": "task",
+        "class": "task well well-lg",
         "id": generateDomID()
     });
+    var inputGroup = $("<div>", {"class": "input-group"}).appendTo(taskDiv);
     $("<input>", {
         "type": "text",
-    }).val(task.assignment).appendTo(taskDiv);
-    renderRemoveButton().appendTo(taskDiv);
+        "class": "form-control",
+        "placeholder": "Znenie úlohy"
+    }).val(task.assignment).appendTo(inputGroup);
+    var inputGroupBtn = $("<div>", {"class": "input-group-btn"}).appendTo(inputGroup);
+    renderRemoveButton().appendTo(inputGroupBtn);
     return taskDiv;
 }
 
 function renderChoiceTask(task) {
-    var taskDiv = $("<div>", {
-        "class": "task",
-        "id": generateDomID()
-    });
-    $("<input>", {
-        "type": "text",
-    }).val(task.assignment).appendTo(taskDiv);
-    renderRemoveButton().appendTo(taskDiv);
+    var taskDiv = renderTextTask(task);
     var choicesDiv = $("<div>", {"class": "choices"}).appendTo(taskDiv);
     if (task["choices"].length == 0) {
         renderChoice("choice_" + taskDiv.attr("id")).appendTo(choicesDiv);
@@ -93,25 +90,27 @@ function renderChoiceTask(task) {
             renderChoice("choice_" + taskDiv.attr("id"), task["choices"][choice], task["choices"][choice]==task["correct"]).appendTo(choicesDiv);
         }
     }
-    $("<button>", {"class": "add_choice"}).click(function() {
+    $("<button>", {"class": "add_choice btn btn-default"}).click(function() {
         renderChoice("choice_" + taskDiv.attr("id"), choice).appendTo(choicesDiv);
-    }).html("pridat moznost").appendTo(taskDiv);
+    }).html("<span class=\"glyphicon glyphicon-plus\"></span>").appendTo(taskDiv);
     return taskDiv;
 }
 
 function renderChoice(name, content = "", checked = false) {
-    var choiceDiv = $("<div>", {"class" : "choice"});
-    $("<input>", {"type": "radio", "name": name}).prop("checked", checked).appendTo(choiceDiv);
-    $("<input>", {"type": "text"}).val(content).appendTo(choiceDiv);
-    $("<button>", {"class": "delete_choice"}).html("X").click(function() {
-        $(this).parent().remove();   
-    }).appendTo(choiceDiv);
+    var choiceDiv = $("<div>", {"class" : "choice input-group"});
+    var inputGroupAddon = $("<div>", {"class": "input-group-addon"}).appendTo(choiceDiv);
+    $("<input>", {"type": "radio", "name": name}).prop("checked", checked).appendTo(inputGroupAddon);
+    $("<input>", {"type": "text", "class": "form-control"}).val(content).appendTo(choiceDiv);
+    var inputGroupBtn = $("<div>", {"class": "input-group-btn"}).appendTo(choiceDiv);
+    $("<button>", {"class": "delete_choice btn btn-default"}).html("<span class=\"glyphicon glyphicon-remove\"></span>&nbsp;").click(function() {
+        $(this).parents(".choice").remove();   
+    }).appendTo(inputGroupBtn);
     return choiceDiv;
 }
 
 function renderRemoveButton() {
-    var removeButton = $("<button>", { "class": "delete_task" }).append("X").click(function (el) {
-        var taskDiv = $(el.target).parent();
+    var removeButton = $("<button>", { "class": "delete_task btn btn-danger" }).append("<span class=\"glyphicon glyphicon-remove\"></span>&nbsp;").click(function (el) {
+        var taskDiv = $(el.target).parents(".task");
         delete tasks[taskDiv.attr('id')];
         taskDiv.remove();
     });
@@ -163,6 +162,10 @@ function UpdateAndValidate() {
             }
         }
     }
+    if ($("#test_name").val() == "") {
+        $("#test_name_error").html("Názov testu nesmie byť prázdny.");
+        success = false;
+    }
     return success;
 }
 
@@ -171,11 +174,12 @@ function AddError(task, error) {
     if (errorDiv.html() != "") {
         errorDiv.append("<br />");
     }
-    errorDiv.append(error);
+    $("<div>", {"class": "bg-danger"}).html(error).appendTo(errorDiv);
 }
 
 function ResetErrors() {
     for (var task in tasks) {
         $("#" + task + " .errors").empty();
     }
+    $("#test_name_error").html("");
 }

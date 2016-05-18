@@ -16,4 +16,7 @@ function requestData() {
 
 function updateData(data) {
     $("#current_tests").html(data["current_tests"]);
+    if ("results" in data) {
+        $("#test_results").html(data["results"]);
+    }
 }

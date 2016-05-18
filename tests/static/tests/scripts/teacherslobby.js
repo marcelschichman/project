@@ -1,4 +1,9 @@
 ﻿$(document).ready(function () {
+    requestData();
+    setInterval(requestData, 1000);
+});
+
+function requestData() {
     $.ajax({
         url: updateUrl,
         dataType: 'json',
@@ -7,7 +12,8 @@
         console.log(data["my_tests"]);
         updateData(data)
     });
-});
+}
+
 
 function updateData(data) {
     $("#my_tests").html(data["my_tests"]);

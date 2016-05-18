@@ -1,0 +1,91 @@
+﻿{% extends "tests/base.html" %}
+
+{% block scripts %}
+    {% load staticfiles %}
+    <script src="{% static "tests/scripts/login.js" %}"></script>
+    <link href="{% static "tests/css/login.css" %}" type="text/css" rel="stylesheet" />
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    	<div class="row">
+			<div class="col-md-6 col-md-offset-3">
+				<div class="panel panel-login">
+					<div class="panel-heading">
+						<div class="row">
+							<div class="col-xs-6">
+								<a href="#" {% if not signin_errors %} class="active" {% endif %} id="login-form-link">Prihlásenie</a>
+							</div>
+							<div class="col-xs-6">
+								<a href="#" {% if signin_errors %} class="active" {% endif %} id="register-form-link">Registrácia</a>
+							</div>
+						</div>
+						<hr>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-lg-12">
+								<form id="login-form" method="post" role="form" {% if not signin_errors %} style="display: block;" {% else %} style="display: none;" {% endif %}>
+                                    {% csrf_token %}
+									<div class="form-group">
+										<input type="text" name="username" id="login-username" tabindex="1" class="form-control" placeholder="Prihlasovacie meno" value="{{ asdf }}">
+									</div>
+									<div class="form-group">
+										<input type="password" name="password" id="login-password" tabindex="2" class="form-control" placeholder="Heslo">
+									</div>
+                                    {% if login_error %}
+                                    <div class="alert alert-danger">{{ login_error }}</div>
+                                    {% endif %}
+									<div class="form-group">
+										<div class="row">
+											<div class="col-sm-6 col-sm-offset-3">
+												<input type="submit" name="login-submit" id="login-submit" tabindex="4" class="form-control btn btn-login" value="Prihlásiť sa">
+											</div>
+										</div>
+									</div>
+								</form>
+								<form id="register-form" method="post" role="form" {% if signin_errors %} style="display: block;" {% else %} style="display: none;" {% endif %}>
+                                    {% csrf_token %}
+									<div class="form-group">
+										<input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Prihlasovacie meno" value="{{ username }}">
+									</div>
+									<div class="form-group">
+										<input type="email" name="email" id="email" tabindex="1" class="form-control" placeholder="Emailová adresa" value="{{ email }}">
+									</div>
+									<div class="form-group">
+										<input type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Heslo">
+									</div>
+									<div class="form-group">
+										<input type="password" name="confirm-password" id="confirm-password" tabindex="2" class="form-control" placeholder="Potvrdenie hesla">
+									</div>
+									<div class="form-group">
+										<input type="text" name="firstname" id="firstname" tabindex="1" class="form-control" placeholder="Krstné meno" value="{{ first_name }}">
+									</div>
+									<div class="form-group">
+										<input type="text" name="lastname" id="lastname" tabindex="1" class="form-control" placeholder="Priezvisko" value="{{ last_name }}">
+									</div>
+									<div class="form-group text-center">
+										<input type="checkbox" tabindex="3" class="" name="teacher" id="teacher">
+										<label for="teacher"> Učiteľ</label>
+									</div>
+                                    {% if signin_errors %}
+                                        {% for error in signin_errors %}
+                                            <div class="alert alert-danger">{{ error }}</div>
+                                        {% endfor %}
+                                    {% endif %}
+									<div class="form-group">
+										<div class="row">
+											<div class="col-sm-6 col-sm-offset-3">
+												<input type="submit" name="register-submit" id="register-submit" tabindex="4" class="form-control btn btn-register" value="Zaregistrovať sa">
+											</div>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

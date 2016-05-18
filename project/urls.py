@@ -16,7 +16,8 @@ admin.autodiscover()
 
 urlpatterns = [
     url(r'^$', tests.views.lobby, name='lobby'),
-    url(r'^login/$', tests.views.login, name='login'),
+    url(r'^login/$', tests.views.login_view, name='login'),
+    url(r'^logout/$', tests.views.logout_view, name='logout'),
     url(r'^createtest/$', tests.views.create_test, name='create_test'),
     url(r'^edittest/(?P<test_id>[0-9]+)/$', tests.views.create_test, name='edit_test'),
     url(r'^taketest/(?P<test_id>[0-9]+)/$', tests.views.take_test, name='take_test'),

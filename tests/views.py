@@ -5,13 +5,77 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseForbidden
 from django.utils.html import escape
 from django.shortcuts import get_object_or_404
+from django.contrib.auth import authenticate, login, logout
 from .models import *
 import json
 import datetime
 
+def logout_view(request):
+    logout(request)
+    return redirect('lobby')
 
-def login(request):
-    return HttpResponse('here will be login page')
+def login_view(request):
+    if request.user.is_authenticated():
+        return redirect('lobby')
+
+    if request.method == "POST":
+        if "login-submit" in request.POST:
+            username = request.POST.get('username', '')
+            password = request.POST.get('password', '')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('lobby')
+            else:
+                return render(request, 'tests/login.html', {'login_error': "Nesprávne meno alebo heslo."})
+        else:
+            signin_errors = []
+            username = request.POST.get('username', '')
+            email = request.POST.get('email', '')
+            password1 = request.POST.get('password', '')
+            password2 = request.POST.get('confirm-password', '')
+            first_name = request.POST.get('firstname', '')
+            last_name = request.POST.get('lastname', '')
+            is_teacher = request.POST.get('teacher', False)
+            if User.objects.filter(username=username).exists():
+                username = ''
+                signin_errors.append("Účet s uvedeným prihlasovacím menom už existuje.");
+            if User.objects.filter(email=email).exists():
+                email = ''
+                signin_errors.append("Účet s uvedeným emailom už existuje.");
+            if len(password1) < 6:
+                signin_errors.append("Príliš krátke heslo.");
+            if password1 != password2:
+                signin_errors.append("Zadané heslá sa nezhodujú.");
+            if not first_name:
+                signin_errors.append("Nezadali ste krstné meno.");
+            if not last_name:
+                signin_errors.append("Nezadali ste priezvisko.");
+            if signin_errors:
+                return render(request, 'tests/login.html', {
+                    'signin_errors': signin_errors, 
+                    "username": username,
+                    "email": email, 
+                    "first_name": first_name, 
+                    "last_name": last_name, 
+                    "is_teacher": is_teacher
+                    })
+            else:
+                user = User.objects.create_user(username, email, password1)
+                user.first_name = first_name
+                user.last_name = last_name
+                user.save()
+                if is_teacher:
+                    teachers = Group.objects.get(name='teacher')
+                    teachers.user_set.add(user)
+                else:
+                    students = Group.objects.get(name='student')
+                    students.user_set.add(user)
+                user = authenticate(username=username, password=password1)
+                login(request, user)
+                return redirect('lobby')
+
+    return render(request, 'tests/login.html')
 
 @login_required(login_url='/login/')
 def lobby(request):    
@@ -151,9 +215,27 @@ def update_student(request):
     if not request.user.is_authenticated():
         return HttpResponseForbidden()
     
-    current_tests = Test.objects.filter(is_active=True)
+    current_tests = Test.objects.filter(is_active=True).exclude(pk__in=[progress.test.pk for progress in TestProgress.objects.filter(student__username=request.user, time_end__isnull=False)])
     current_tests_render = render_to_string('tests/current_tests.html', {"tests": current_tests})
-    return HttpResponse(json.dumps({"current_tests": current_tests_render}))
+    
+    response_data = {}
+    response_data["current_tests"] = current_tests_render
+
+    
+    test_progresses = TestProgress.objects.filter(student=request.user)
+    result_list = []
+    for test_progress in test_progresses:
+        if test_progress.evaluated:
+            row = {
+                "pk": test_progress.pk,
+                "name": test_progress.test.name,
+                "total": Question.objects.filter(test=test_progress.test).count(),
+                "correct": Answer.objects.filter(question__test=test_progress.test, student=test_progress.student, correct=True).count(),
+            }
+            result_list.append(row)
+    response_data["results"] = render_to_string('tests/my_results.html', {"test_results": result_list})
+
+    return HttpResponse(json.dumps(response_data))
 
 
 @login_required(login_url='/login/')
